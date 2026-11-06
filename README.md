@@ -1,10 +1,10 @@
-# 🔍 CapCheck: Real vs. AI-Generated Image & Video Detector
+#  CapCheck: Real vs. AI-Generated Image & Video Detector
 
 > **An explainable digital media forensics system designed to detect whether an image or video is Authentic (Camera-Captured) or AI-Generated (Midjourney, Stable Diffusion, DALL-E, Sora, Runway, Deepfakes) with transparent explanations for every calculation.**
 
 ---
 
-## 🌟 Key Features
+##  Key Features
 
 - **Multi-Modal Inspection**: Analyzes both **Images** (JPEG, PNG, WebP) and **Videos** (MP4, WebM, MOV).
 - **5 Explainable Forensic Pillars**:
@@ -82,7 +82,7 @@ To verify all forensic engines:
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 Joshnaa/
@@ -132,4 +132,4 @@ For complete details on:
 - Top 10 Viva Voce questions & model answers
 - 10-Slide presentation outline for PowerPoint
 
-👉 **Read [PROJECT_EXPLANATION.md](PROJECT_EXPLANATION.md)**.
+**Read [PROJECT_EXPLANATION.md](PROJECT_EXPLANATION.md)**.
