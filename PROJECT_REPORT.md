@@ -1,4 +1,4 @@
-# 📋 CapCheck: Comprehensive Project Technical & Architectural Report
+# 📋 VeriMedia: Comprehensive Project Technical & Architectural Report
 
 **Project Title:** CapCheck — Real vs. AI-Generated Image & Video Detection & Explainability System  
 **Developer:** Antigravity / Charan  
