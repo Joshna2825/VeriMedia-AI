@@ -48,7 +48,7 @@ Add your actual project folder structure here.
 - Add more forensic analysis techniques.
 
 ## developed By
-**Josns sapavat**
+**Josna Sapavat**
 
 B.Tech Student | Aspiring Software Developer
 
