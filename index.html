@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CapCheck — Real vs. AI Media Detector</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <header class="top-nav">
+            <div class="brand">
+                <div class="brand-logo">
+                    <span class="icon">🔍</span>
+                </div>
+                <div class="brand-text">
+                    <h1>Cap<span class="gradient-text">Check</span></h1>
+                    <span class="brand-subtitle">Catch the Cap &bull; Real vs. AI Media Forensics & Explainability</span>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button id="btn-open-viva-modal" class="btn btn-outline" title="Open complete viva guide & interview Q&A">
+                    🎓 Viva & Defense Guide
+                </button>
+                <button id="btn-open-arch-modal" class="btn btn-outline" title="View technical system architecture">
+                    📐 Architecture
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            <!-- Hero / Upload Section -->
+            <section class="upload-section card">
+                <div class="section-header">
+                    <h2>Media Forensic Inspector</h2>
+                    <p class="subtitle">Upload any image or video to determine whether it is an authentic physical camera capture or AI-synthesized (Diffusion, Midjourney, GAN, Deepfake, Sora/Runway).</p>
+                </div>
+
+                <!-- Dropzone -->
+                <div id="dropzone" class="dropzone">
+                    <input type="file" id="file-input" accept="image/*,video/*" hidden>
+                    <div class="dropzone-content">
+                        <div class="upload-icon-circle">
+                            <span class="upload-icon">📁</span>
+                        </div>
+                        <h3>Drag & drop media here, or <span class="link-text">browse files</span></h3>
+                        <p class="file-hint">Supports Images (JPG, PNG, WebP) and Videos (MP4, WebM, MOV) up to 100MB</p>
+                    </div>
+                    <div id="upload-progress-container" class="upload-progress-container hidden">
+                        <div class="spinner"></div>
+                        <p id="analysis-status-text">Analyzing multi-pillar forensic signals...</p>
+                        <div class="progress-bar-bg">
+                            <div id="analysis-progress-bar" class="progress-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Samples Bar -->
+                <div class="samples-bar">
+                    <span class="samples-label">⚡ Quick Test Samples:</span>
+                    <div class="samples-pills">
+                        <button class="sample-btn" data-sample="real_photo">
+                            📸 Real Camera Photo
+                        </button>
+                        <button class="sample-btn" data-sample="ai_photo">
+                            🤖 AI Art (SDXL/Midjourney)
+                        </button>
+                        <button class="sample-btn" data-sample="splice_photo">
+                            🎭 Deepfake Splice Photo
+                        </button>
+                        <button class="sample-btn" data-sample="real_video">
+                            🎥 Authentic Video
+                        </button>
+                        <button class="sample-btn" data-sample="ai_video">
+                            🎬 AI Generative Video
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section (Dynamic) -->
+            <section id="results-section" class="results-section hidden">
+                <!-- Executive Verdict Banner -->
+                <div class="verdict-banner card" id="verdict-card">
+                    <div class="verdict-header">
+                        <div class="verdict-badge-wrap">
+                            <span class="file-type-badge" id="media-type-badge">IMAGE</span>
+                            <span class="badge" id="verdict-badge">ANALYZING</span>
+                        </div>
+                        <div class="report-actions">
+                            <button id="btn-print-report" class="btn btn-sm btn-ghost">🖨️ Print / Save Report</button>
+                        </div>
+                    </div>
+
+                    <div class="verdict-content-grid">
+                        <!-- Score Gauges -->
+                        <div class="gauges-column">
+                            <div class="gauge-card ai-gauge">
+                                <span class="gauge-label">AI-GENERATED PROBABILITY</span>
+                                <div class="gauge-value-wrap">
+                                    <span class="gauge-number" id="ai-prob-num">0%</span>
+                                </div>
+                                <div class="mini-bar">
+                                    <div class="mini-bar-fill ai-fill" id="ai-prob-bar"></div>
+                                </div>
+                            </div>
+                            <div class="gauge-card real-gauge">
+                                <span class="gauge-label">AUTHENTIC CAMERA PROBABILITY</span>
+                                <div class="gauge-value-wrap">
+                                    <span class="gauge-number" id="real-prob-num">0%</span>
+                                </div>
+                                <div class="mini-bar">
+                                    <div class="mini-bar-fill real-fill" id="real-prob-bar"></div>
+                                </div>
+                            </div>
+                            <div class="confidence-box">
+                                <span class="confidence-title">Assessment Confidence:</span>
+                                <span class="confidence-badge" id="confidence-badge">High</span>
+                            </div>
+                        </div>
+
+                        <!-- Spoken Pitch Summary -->
+                        <div class="pitch-column">
+                            <div class="pitch-box">
+                                <div class="pitch-header">
+                                    <span class="icon">🎙️</span>
+                                    <h4>Viva Voce / Presentation Summary (Spoken Pitch)</h4>
+                                </div>
+                                <p id="viva-pitch-text" class="pitch-text">
+                                    Analyzing forensic signals...
+                                </p>
+                            </div>
+                            <div class="media-preview-box">
+                                <div id="media-preview-container" class="preview-container">
+                                    <!-- Rendered dynamically -->
+                                </div>
+                                <span id="preview-filename" class="preview-filename">filename.jpg</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Inspector Panels (for Images) -->
+                <div id="image-visualizer-container" class="visualizer-container card">
+                    <div class="section-header-compact">
+                        <h3>🔬 Interactive Visual Forensic Inspector</h3>
+                        <p class="subtitle">Inspect microscopic compression differences, spectral checkerboards, and noise residuals.</p>
+                    </div>
+
+                    <!-- Visualizer Tabs -->
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="ela-tab">
+                            💥 Error Level Analysis (ELA) Heatmap
+                        </button>
+                        <button class="tab-btn" data-tab="fft-tab">
+                            ⚡ 2D FFT Power Spectrum (Checkerboard Grid)
+                        </button>
+                        <button class="tab-btn" data-tab="noise-tab">
+                            📡 Sensor Noise Residual (PRNU)
+                        </button>
+                    </div>
+
+                    <!-- Tab 1: ELA Slider -->
+                    <div id="ela-tab" class="tab-pane active">
+                        <div class="tab-description">
+                            <strong>How to read this:</strong> Authentic photos display consistent, smooth compression errors across textures. Spliced deepfakes or AI generations display distinct bright compression discrepancies or synthetic over-smoothing.
+                        </div>
+                        <div class="comparison-viewport">
+                            <div class="side-by-side-grid">
+                                <div class="view-item">
+                                    <span class="view-label">Original Image</span>
+                                    <img id="ela-orig-view" src="" alt="Original Image" class="inspect-img">
+                                </div>
+                                <div class="view-item">
+                                    <span class="view-label">Amplified ELA Compression Disparity Heatmap</span>
+                                    <img id="ela-diff-view" src="" alt="ELA Heatmap" class="inspect-img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: FFT 2D Spectrum -->
+                    <div id="fft-tab" class="tab-pane">
+                        <div class="tab-description">
+                            <strong>How to read this:</strong> Physical camera lenses obey 1/f² radial optical decay. Neural network upsamplers leave periodic checkerboard spikes, axial crosses, or bright spectral rings.
+                        </div>
+                        <div class="comparison-viewport">
+                            <div class="side-by-side-grid">
+                                <div class="view-item">
+                                    <span class="view-label">Original Image</span>
+                                    <img id="fft-orig-view" src="" alt="Original Image" class="inspect-img">
+                                </div>
+                                <div class="view-item">
+                                    <span class="view-label">2D Fast Fourier Transform Magnitude Spectrum</span>
+                                    <img id="fft-spec-view" src="" alt="FFT Spectrum" class="inspect-img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 3: Noise Residual Map -->
+                    <div id="noise-tab" class="tab-pane">
+                        <div class="tab-description">
+                            <strong>How to read this:</strong> Physical camera silicon sensors produce natural Poisson photon noise grain (PRNU). AI images frequently feature plastic over-smoothing or synthetic uniform noise.
+                        </div>
+                        <div class="comparison-viewport">
+                            <div class="side-by-side-grid">
+                                <div class="view-item">
+                                    <span class="view-label">Original Image</span>
+                                    <img id="noise-orig-view" src="" alt="Original Image" class="inspect-img">
+                                </div>
+                                <div class="view-item">
+                                    <span class="view-label">Amplified Silicon Sensor Noise Residual</span>
+                                    <img id="noise-res-view" src="" alt="Noise Residual" class="inspect-img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Inspector Panel (for Videos) -->
+                <div id="video-visualizer-container" class="visualizer-container card hidden">
+                    <div class="section-header-compact">
+                        <h3>🎬 Video Temporal Consistency & Timeline Inspector</h3>
+                        <p class="subtitle">Evaluates inter-frame Structural Similarity (SSIM), motion drift, and generative frame flickering.</p>
+                    </div>
+
+                    <!-- Video Timeline Stats -->
+                    <div class="video-stats-grid">
+                        <div class="vstat-card">
+                            <span class="vstat-title">Average Inter-Frame SSIM</span>
+                            <span class="vstat-val" id="vstat-ssim">0.00</span>
+                            <span class="vstat-sub">Physical motion: > 0.82</span>
+                        </div>
+                        <div class="vstat-card">
+                            <span class="vstat-title">Temporal Flickering (Jitter σ)</span>
+                            <span class="vstat-val" id="vstat-jitter">0.00</span>
+                            <span class="vstat-sub">AI flickering threshold: > 0.07</span>
+                        </div>
+                        <div class="vstat-card">
+                            <span class="vstat-title">Total Frames Sampled</span>
+                            <span class="vstat-val" id="vstat-frames">0</span>
+                            <span class="vstat-sub" id="vstat-duration">0.0s duration</span>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Graph -->
+                    <div class="timeline-chart-wrap">
+                        <h4>Frame-by-Frame Temporal Anomaly Curve</h4>
+                        <canvas id="temporal-chart" width="800" height="180"></canvas>
+                        <div class="chart-legend">
+                            <span class="legend-item"><span class="dot real-dot"></span> High SSIM Consistency (Smooth Optical Flow)</span>
+                            <span class="legend-item"><span class="dot ai-dot"></span> SSIM Drop / AI Flickering Spike</span>
+                        </div>
+                    </div>
+
+                    <!-- Suspicious vs Clean Frame Snapshots -->
+                    <div class="keyframes-comparison-grid">
+                        <div class="keyframe-card">
+                            <span class="kf-badge danger">Highest Anomaly Keyframe</span>
+                            <img id="kf-highest-img" src="" alt="Highest Anomaly Keyframe" class="kf-img">
+                            <div class="kf-meta">
+                                <span id="kf-highest-time">Timestamp: 00:00.0</span>
+                                <span id="kf-highest-score" class="score-pill danger">AI Score: 0%</span>
+                            </div>
+                        </div>
+                        <div class="keyframe-card">
+                            <span class="kf-badge success">Most Consistent Keyframe</span>
+                            <img id="kf-lowest-img" src="" alt="Most Consistent Keyframe" class="kf-img">
+                            <div class="kf-meta">
+                                <span id="kf-lowest-time">Timestamp: 00:00.0</span>
+                                <span id="kf-lowest-score" class="score-pill success">AI Score: 0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- "Explain Everything" Forensic Breakdown Cards -->
+                <div class="explain-container card">
+                    <div class="section-header-compact">
+                        <h3>📖 "Explain Everything" Forensic Pillars</h3>
+                        <p class="subtitle">Complete transparent breakdown of each detection engine designed for easy presentation.</p>
+                    </div>
+
+                    <div id="forensic-cards-list" class="forensic-cards-list">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Viva & Defense Modal -->
+        <div id="viva-modal" class="modal-overlay hidden">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h3>🎓 Viva Voce & Interview Defense Guide</h3>
+                    <button class="modal-close" id="btn-close-viva">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="viva-section">
+                        <h4>1. What is the Core Principle of this Project?</h4>
+                        <p>Real images and videos are created by <strong>physical optical sensors</strong> (light enters a physical glass lens, passes through a Bayer filter, and hits silicon photodiodes, generating Poisson sensor noise and EXIF hardware records). In contrast, <strong>Generative AI models</strong> (Diffusion models, GANs, Sora, Midjourney) mathematically synthesize pixels using deep neural decoders. These neural decoders leave distinct, invisible mathematical fingerprints: periodic frequency grid checkerboards, compression discrepancies, and temporal flickering.</p>
+                    </div>
+                    <div class="viva-section">
+                        <h4>2. What are the 5 Forensic Pillars Used?</h4>
+                        <ul>
+                            <li><strong>1. Provenance & Metadata:</strong> Real cameras write ISO, shutter speed, and lens tags; AI generators either strip EXIF or store prompt text chunks (like PNG parameters).</li>
+                            <li><strong>2. Error Level Analysis (ELA):</strong> Recompresses the image at 90% quality; real images degrade uniformly, while AI or spliced deepfakes display distinct compression boundaries.</li>
+                            <li><strong>3. 2D Fast Fourier Transform (FFT):</strong> Computes the frequency magnitude spectrum to identify periodic checkerboard grid artifacts caused by transposed convolution upsampling layers.</li>
+                            <li><strong>4. Noise Residual (PRNU):</strong> Evaluates physical silicon sensor grain vs synthetic plastic-like over-smoothing or artificial Gaussian noise.</li>
+                            <li><strong>5. Video Temporal Consistency:</strong> Samples frames to measure inter-frame Structural Similarity (SSIM) and motion vector stability to detect generative flickering and morphing.</li>
+                        </ul>
+                    </div>
+                    <div class="viva-section">
+                        <h4>3. Top 5 Questions You Might Be Asked in Viva:</h4>
+                        <div class="qa-item">
+                            <span class="q">Q1: Why do Generative AI images have periodic grid artifacts in frequency space?</span>
+                            <span class="a"><strong>Answer:</strong> Generative networks generate images from low-dimensional latent space using upsampling operations such as Transposed Convolutions or Pixel Shuffle. Because kernel filters overlap periodically on the grid during synthesis, they introduce microscopic spatial periodicities. When transformed via 2D FFT, these periodicities manifest as distinct high-frequency spikes and symmetric crosses.</span>
+                        </div>
+                        <div class="qa-item">
+                            <span class="q">Q2: What is Error Level Analysis (ELA) and what does it detect?</span>
+                            <span class="a"><strong>Answer:</strong> ELA calculates the pixel-wise difference between the original image and a version resaved at 90% JPEG quality. In an authentic photograph, all 8x8 DCT blocks reach a consistent error equilibrium. If an AI image was generated or a face was spliced in, the new region has a distinct error rate that lights up prominently on the ELA heatmap.</span>
+                        </div>
+                        <div class="qa-item">
+                            <span class="q">Q3: How do you detect AI-generated videos versus real videos?</span>
+                            <span class="a"><strong>Answer:</strong> We analyze frame-to-frame temporal consistency using the Structural Similarity Index (SSIM). Real physical cameras follow continuous optical physics. AI video models (such as Sora, Runway, or Deepfakes) synthesize frames in temporal batches, causing microscopic flickering, texture morphing (e.g. background warping, eye/finger jitter), and abnormal SSIM standard deviations.</span>
+                        </div>
+                        <div class="qa-item">
+                            <span class="q">Q4: What if an attacker strips EXIF metadata from a real image?</span>
+                            <span class="a"><strong>Answer:</strong> Our ensemble model assigns only 15% weight to metadata. If metadata is missing, the system marks metadata as inconclusive and relies on the visual, frequency (FFT), compression (ELA), and sensor noise (PRNU) pillars to reach the final verdict.</span>
+                        </div>
+                        <div class="qa-item">
+                            <span class="q">Q5: Why is this explainable approach superior to a black-box deep learning classifier?</span>
+                            <span class="a"><strong>Answer:</strong> Deep learning classifiers often overfit to specific training datasets and cannot explain why a prediction was made. Our multi-pillar forensic framework isolates physical signal properties (optics, compression, sensor physics, Fourier harmonics), providing human-auditable evidence for every score.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Architecture Modal -->
+        <div id="arch-modal" class="modal-overlay hidden">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h3>📐 CapCheck System Architecture</h3>
+                    <button class="modal-close" id="btn-close-arch">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="arch-flow">
+                        <div class="arch-step">
+                            <span class="step-num">1</span>
+                            <h5>Media Preprocessor</h5>
+                            <p>Detects media format, normalizes color space, extracts image metadata or decodes video frames.</p>
+                        </div>
+                        <div class="arch-arrow">➔</div>
+                        <div class="arch-step">
+                            <span class="step-num">2</span>
+                            <h5>5-Pillar Forensic Engine</h5>
+                            <p>Parallel evaluation of EXIF provenance, 8x8 DCT ELA, 2D FFT spectral magnitude, PRNU noise grain, and video SSIM.</p>
+                        </div>
+                        <div class="arch-arrow">➔</div>
+                        <div class="arch-step">
+                            <span class="step-num">3</span>
+                            <h5>Ensemble Scorer</h5>
+                            <p>Calculates weighted AI probability, confidence metrics, and generates natural-language explainability rationale.</p>
+                        </div>
+                        <div class="arch-arrow">➔</div>
+                        <div class="arch-step">
+                            <span class="step-num">4</span>
+                            <h5>Interactive UI</h5>
+                            <p>Displays side-by-side ELA/FFT maps, temporal anomaly curve, and printable forensic report.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>CapCheck &bull; Catch the Cap &bull; Transparent, Explainable Digital Media Forensics</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
