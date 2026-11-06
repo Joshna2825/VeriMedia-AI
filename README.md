@@ -1,4 +1,4 @@
-#  CapCheck: Real vs. AI-Generated Image & Video Detector
+#  VeriMedia AI: Real vs. AI-Generated Image & Video Detector
 
 > **An explainable digital media forensics system designed to detect whether an image or video is Authentic (Camera-Captured) or AI-Generated (Midjourney, Stable Diffusion, DALL-E, Sora, Runway, Deepfakes) with transparent explanations for every calculation.**
 
