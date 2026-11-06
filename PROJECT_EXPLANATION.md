@@ -1,4 +1,4 @@
-# 🎓 CapCheck: Project Explanation & Viva Defense Guide
+# VeriMedia: Project Explanation & Viva Defense Guide
 
 > **Project Title:** CapCheck: Real vs. AI-Generated Image & Video Detector with Multi-Pillar Explainability  
 > **Domain:** Computer Vision, Digital Media Forensics, Signal Processing, Artificial Intelligence  
@@ -71,7 +71,7 @@ To explain this project simply to anyone, remember this single distinction:
 
 ---
 
-### 💥 Pillar 2: Error Level Analysis (ELA)
+###  Pillar 2: Error Level Analysis (ELA)
 * **What it does:** Detects compression discrepancies and manipulated or spliced regions.
 * **The Mathematics:**
   1. JPEG compression divides an image into $8 \times 8$ blocks and applies the Discrete Cosine Transform (DCT).
@@ -82,7 +82,7 @@ To explain this project simply to anyone, remember this single distinction:
 
 ---
 
-### ⚡ Pillar 3: 2D Fast Fourier Transform (FFT) Frequency Analysis
+###  Pillar 3: 2D Fast Fourier Transform (FFT) Frequency Analysis
 * **What it does:** Detects invisible periodic grid and checkerboard artifacts left by generative neural upsamplers.
 * **The Mathematics:**
   1. Computes the 2D Discrete Fourier Transform:
@@ -96,7 +96,7 @@ To explain this project simply to anyone, remember this single distinction:
 
 ---
 
-### 📡 Pillar 4: Noise Residual & Laplacian Texture Analysis
+###  Pillar 4: Noise Residual & Laplacian Texture Analysis
 * **What it does:** Inspects microscopic silicon sensor grain and surface sharpness.
 * **How it works:**
   1. Isolates high-frequency noise residual by subtracting a median-filtered version of the image:
@@ -109,7 +109,7 @@ To explain this project simply to anyone, remember this single distinction:
 
 ---
 
-### 🎬 Pillar 5: Video Temporal Consistency Analysis
+###  Pillar 5: Video Temporal Consistency Analysis
 * **What it does:** Detects frame-to-frame flickering, morphing, and latent drift in videos.
 * **The Mathematics:**
   1. Extracts evenly spaced keyframes across the video stream.
