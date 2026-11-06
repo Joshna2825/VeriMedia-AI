@@ -20,7 +20,7 @@
 
 ---
 
-## 🚀 Quick Start Guide
+##  Quick Start Guide
 
 ### 1. Run the Web Dashboard
 
@@ -123,7 +123,7 @@ Joshnaa/
 
 ---
 
-## 🎓 Viva Voce & Presentation Guide
+##  Viva Voce & Presentation Guide
 
 For complete details on:
 - How to explain every algorithm in 2 minutes
